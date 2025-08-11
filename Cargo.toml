@@ -2,5 +2,9 @@
 name = "mp"
 version = "0.1.0"
 edition = "2024"
+description = "A command-line tool to publish text-only blog posts to Micropub endpoints."
+authors = ["Michael Descy <mike@mjdescy.me>"]
+license = "MIT"
+
 
 [dependencies]
