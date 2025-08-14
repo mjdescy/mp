@@ -1,4 +1,5 @@
 mod configure;
+mod publish_draft;
 
 use clap::{arg, command, value_parser, Command};
 use std::fs;

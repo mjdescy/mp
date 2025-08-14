@@ -1,4 +1,4 @@
-mod microblog_service;
+pub(crate) mod microblog_service;
 mod app_config;
 mod user_input;
 
