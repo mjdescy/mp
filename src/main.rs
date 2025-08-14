@@ -11,7 +11,7 @@ use crate::get_content::get_content_from_args;
 
 #[tokio::main]
 async fn main() {
-    let matches = command!() // requires `cargo` feature
+    let matches = command!()
         .subcommand(
             Command::new("post")
                 .about("Publish a post")
