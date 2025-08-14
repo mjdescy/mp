@@ -1,3 +1,4 @@
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PostStatus {
     Published,
     Draft,
@@ -11,7 +12,10 @@ impl PostStatus {
         }
     }
 
-    pub fn is_draft(&self) -> bool {
-        matches!(self, PostStatus::Draft)
+    pub fn action_description(&self) -> &str {
+        match self {
+            PostStatus::Published => "Post published",
+            PostStatus::Draft => "Draft created",
+        }
     }
 }

@@ -4,7 +4,7 @@ mod user_input;
 
 use std::io;
 use crate::configure::microblog_service::MicroblogService;
-use crate::configure::app_config::AppConfig;
+pub use crate::configure::app_config::AppConfig;
 use crate::configure::user_input::get_user_input;
 
 pub fn handle_configure_verb() -> io::Result<()> {

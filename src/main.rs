@@ -1,14 +1,16 @@
 mod configure;
-mod publish_draft;
+mod get_content;
+mod publish;
 
 use clap::{arg, command, value_parser, Command};
-use std::fs;
-use std::io::{self, Read};
-use std::path::Path;
 
 use crate::configure::handle_configure_verb;
+use crate::publish::{handle_draft_verb, handle_post_verb};
+use crate::configure::AppConfig;
+use crate::get_content::get_content_from_args;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let matches = command!() // requires `cargo` feature
         .subcommand(
             Command::new("post")
@@ -49,25 +51,24 @@ fn main() {
         .get_matches();
 
     if let Some(post_matches) = matches.subcommand_matches("post") {
-        let content = if post_matches.get_flag("stdin") {
-            read_stdin_content()
-        } else if let Some(file_path) = post_matches.get_one::<String>("file") {
-            // --file with a value: mp post --file path/to/file
-            read_file_content(file_path)
-        } else if let Some(content_arg) = post_matches.get_one::<String>("content") {
-            // Direct content: mp post "content"
-            Ok(content_arg.clone())
-        } else {
-            Err(std::io::Error::new(
-                std::io::ErrorKind::InvalidInput,
-                "Either provide content as an argument, use --file with a path, or use --stdin flag"
-            ))
-        };
+        let content = get_content_from_args(post_matches);
         
         match content {
             Ok(text) => {
-                println!("Publishing post with content: {}", text);
-                // Logic to publish the post
+                println!("Publishing post with content:");
+                println!("{}", text);
+
+                let app_config = AppConfig::load().unwrap_or_else(|e| {
+                    eprintln!("Error loading configuration: {}", e);
+                    std::process::exit(1);
+                });
+
+                handle_post_verb(app_config, text)
+                    .await
+                    .unwrap_or_else(|e| {
+                        eprintln!("Error publishing post: {}", e);
+                        std::process::exit(1);
+                    }); 
             }
             Err(e) => {
                 eprintln!("Error reading content: {}", e);
@@ -75,25 +76,24 @@ fn main() {
             }
         }
     } else if let Some(draft_matches) = matches.subcommand_matches("draft") {
-        let content = if draft_matches.get_flag("stdin") {
-            read_stdin_content()
-        } else if let Some(file_path) = draft_matches.get_one::<String>("file") {
-            // --file with a value: mp draft --file path/to/file
-            read_file_content(file_path)
-        } else if let Some(content_arg) = draft_matches.get_one::<String>("content") {
-            // Direct content: mp draft "content"
-            Ok(content_arg.clone())
-        } else {
-            Err(std::io::Error::new(
-                std::io::ErrorKind::InvalidInput,
-                "Either provide content as an argument, use --file with a path, or use --stdin flag"
-            ))
-        };
-        
+        let content = get_content_from_args(draft_matches);
+
         match content {
             Ok(text) => {
-                println!("Creating draft with content: {}", text);
-                // Logic to create a draft
+                println!("Publishing draft with content:");
+                println!("{}", text);
+
+                let app_config = AppConfig::load().unwrap_or_else(|e| {
+                    eprintln!("Error loading configuration: {}", e);
+                    std::process::exit(1);
+                });
+
+                handle_draft_verb(app_config, text)
+                    .await
+                    .unwrap_or_else(|e| {
+                        eprintln!("Error publishing post: {}", e);
+                        std::process::exit(1);
+                    }); 
             }
             Err(e) => {
                 eprintln!("Error reading content: {}", e);
@@ -111,20 +111,4 @@ fn main() {
     } else {
         println!("No valid subcommand was used.");
     }
-}
-
-fn read_file_content(file_path: &str) -> Result<String, std::io::Error> {
-    if !Path::new(file_path).exists() {
-        return Err(std::io::Error::new(
-            std::io::ErrorKind::NotFound,
-            format!("File not found: {}", file_path)
-        ));
-    }
-    fs::read_to_string(file_path)
-}
-
-fn read_stdin_content() -> Result<String, std::io::Error> {
-    let mut buffer = String::new();
-    io::stdin().read_to_string(&mut buffer)?;
-    Ok(buffer)
 }
