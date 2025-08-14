@@ -9,3 +9,5 @@ license = "MIT"
 
 [dependencies]
 clap = { version = "4.5.43", features = ["cargo"] }
+serde = { version = "1.0.219", features = ["derive"] }
+toml = "0.8"

@@ -1,7 +1,11 @@
+mod configure;
+
 use clap::{arg, command, value_parser, Command};
 use std::fs;
 use std::io::{self, Read};
 use std::path::Path;
+
+use crate::configure::handle_configure_verb;
 
 fn main() {
     let matches = command!() // requires `cargo` feature
@@ -96,8 +100,13 @@ fn main() {
             }
         }
     } else if matches.subcommand_matches("configure").is_some() {
-        println!("Configuring authentication token...");
-        // Logic to configure authentication token
+        match handle_configure_verb() {
+            Ok(_) => {},
+            Err(e) => {
+                eprintln!("Error during configuration: {}", e);
+                std::process::exit(1);
+            }
+        }
     } else {
         println!("No valid subcommand was used.");
     }
