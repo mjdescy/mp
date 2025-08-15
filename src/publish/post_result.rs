@@ -10,7 +10,7 @@ pub struct PostResult {
 impl PostResult {
     pub fn as_string(&self) -> String {
         format!(
-            "{} successfully.\nURL: {}\nPreview: {}\nEdit: {}",
+            "{} successfully.\n\nURL:     {}\nPreview: {}\nEdit:    {}",
             self.post_status.action_description(), &self.url, &self.preview, &self.edit
         )
     }

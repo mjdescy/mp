@@ -55,9 +55,6 @@ async fn main() {
         
         match content {
             Ok(text) => {
-                println!("Publishing post with content:");
-                println!("{}", text);
-
                 let app_config = AppConfig::load().unwrap_or_else(|e| {
                     eprintln!("Error loading configuration: {}", e);
                     std::process::exit(1);
@@ -80,9 +77,6 @@ async fn main() {
 
         match content {
             Ok(text) => {
-                println!("Publishing draft with content:");
-                println!("{}", text);
-
                 let app_config = AppConfig::load().unwrap_or_else(|e| {
                     eprintln!("Error loading configuration: {}", e);
                     std::process::exit(1);
