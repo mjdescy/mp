@@ -33,11 +33,3 @@ fn user_opts_to_update_existing_config() -> bool {
 
     response.trim().eq_ignore_ascii_case("y")
 }
-
-pub fn load_config() -> Result<AppConfig, io::Error> {
-    if !AppConfig::config_file_exists() {
-        return Err(io::Error::new(io::ErrorKind::NotFound, "Configuration file not found. Run mp configure to create a configuraiton file."));
-    }
-
-    AppConfig::load()
-}
