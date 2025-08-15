@@ -61,23 +61,26 @@ async fn main() {
     if let Some(post_matches) = matches.subcommand_matches("post") {
         let content = get_content_from_args(post_matches);
         let quiet = post_matches.get_flag("quiet");
-        
+    
         match content {
             Ok(text) => {
                 let app_config = AppConfig::load().unwrap_or_else(|e| {
-                    eprintln!("Error loading configuration: {}", e);
+                    eprintln!("Error loading configuration:");
+                    eprintln!("{}", e);
                     std::process::exit(1);
                 });
 
                 handle_post_verb(app_config, text, quiet)
                     .await
                     .unwrap_or_else(|e| {
-                        eprintln!("Error publishing post: {}", e);
+                        eprintln!("Error publishing post:");
+                        eprintln!("{}", e);
                         std::process::exit(1);
                     }); 
             }
             Err(e) => {
-                eprintln!("Error reading content: {}", e);
+                eprintln!("Error reading content:");
+                eprintln!("{}", e);
                 std::process::exit(1);
             }
         }
@@ -88,19 +91,22 @@ async fn main() {
         match content {
             Ok(text) => {
                 let app_config = AppConfig::load().unwrap_or_else(|e| {
-                    eprintln!("Error loading configuration: {}", e);
+                    eprintln!("Error loading configuration:");
+                    eprintln!("{}", e);
                     std::process::exit(1);
                 });
 
                 handle_draft_verb(app_config, text, quiet)
                     .await
                     .unwrap_or_else(|e| {
-                        eprintln!("Error publishing post: {}", e);
+                        eprintln!("Error publishing draft:");
+                        eprintln!("{}", e);
                         std::process::exit(1);
                     }); 
             }
             Err(e) => {
-                eprintln!("Error reading content: {}", e);
+                eprintln!("Error reading content:");
+                eprintln!("{}", e);
                 std::process::exit(1);
             }
         }
@@ -108,11 +114,15 @@ async fn main() {
         match handle_configure_verb() {
             Ok(_) => {},
             Err(e) => {
-                eprintln!("Error during configuration: {}", e);
+                eprintln!("Error during configuration:");
+                eprintln!("{}", e);
                 std::process::exit(1);
             }
         }
     } else {
-        println!("No valid subcommand was used.");
+        eprintln!("Error:");
+        eprintln!("No subcommand was used.\n");
+        eprintln!("For more information, try '--help'.");
+        std::process::exit(1);
     }
 }
