@@ -27,6 +27,10 @@ async fn main() {
                     arg!(-s --stdin "Read content from stdin")
                         .action(clap::ArgAction::SetTrue)
                 )
+                .arg(
+                    arg!(-q --quiet "Suppress output")
+                        .action(clap::ArgAction::SetTrue)
+                )
         )
         .subcommand(
             Command::new("draft")
@@ -43,6 +47,10 @@ async fn main() {
                     arg!(-s --stdin "Read content from stdin")
                         .action(clap::ArgAction::SetTrue)
                 )
+                .arg(
+                    arg!(-q --quiet "Suppress output")
+                        .action(clap::ArgAction::SetTrue)
+                )
         )
         .subcommand(
             Command::new("configure")
@@ -52,6 +60,7 @@ async fn main() {
 
     if let Some(post_matches) = matches.subcommand_matches("post") {
         let content = get_content_from_args(post_matches);
+        let quiet = post_matches.get_flag("quiet");
         
         match content {
             Ok(text) => {
@@ -60,7 +69,7 @@ async fn main() {
                     std::process::exit(1);
                 });
 
-                handle_post_verb(app_config, text)
+                handle_post_verb(app_config, text, quiet)
                     .await
                     .unwrap_or_else(|e| {
                         eprintln!("Error publishing post: {}", e);
@@ -74,6 +83,7 @@ async fn main() {
         }
     } else if let Some(draft_matches) = matches.subcommand_matches("draft") {
         let content = get_content_from_args(draft_matches);
+        let quiet = draft_matches.get_flag("quiet");
 
         match content {
             Ok(text) => {
@@ -82,7 +92,7 @@ async fn main() {
                     std::process::exit(1);
                 });
 
-                handle_draft_verb(app_config, text)
+                handle_draft_verb(app_config, text, quiet)
                     .await
                     .unwrap_or_else(|e| {
                         eprintln!("Error publishing post: {}", e);
