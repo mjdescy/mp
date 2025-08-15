@@ -43,7 +43,6 @@ async fn publish(app_config: AppConfig, post_content: String, post_status: PostS
             Ok(result)
         },
         Err(e) => {
-            eprintln!("Error publishing post: {}", e);
             Err(e)
         }
     }
