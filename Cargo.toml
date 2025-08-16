@@ -1,10 +1,15 @@
 [package]
 name = "mp"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 description = "mp: Micropub Publisher | A command-line tool to publish text-only blog posts to Micropub endpoints."
 authors = ["Michael Descy <mike@mjdescy.me>"]
 license = "MIT"
+homepage = "https://github.com/mjdescy/mp"
+repository = "https://github.com/mjdescy/mp"
+readme = "README.md"
+keywords = ["micropub", "blog", "microblog", "cli"]
+categories = ["command-line-utilities"]
 
 
 [dependencies]
