@@ -1,10 +1,11 @@
-mod post;
-mod post_result;
-mod post_status;
+pub mod post;
+pub mod post_result;
+pub mod post_status;
 
 use crate::publish::post::Post;
-use crate::publish::post_result::PostResult;
+pub use crate::publish::post_result::PostResult;
 pub use crate::publish::post_status::PostStatus;
+pub use crate::publish::post::PostError;
 use crate::configure::AppConfig;
 
 pub async fn handle_draft_verb(app_config: AppConfig, post_content: String, quiet: bool) -> Result<PostResult, post::PostError> {

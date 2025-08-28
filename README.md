@@ -6,6 +6,8 @@ A command-line tool to publish text-only blog posts to Micropub endpoints.
 
 `mp` is a simple, fast, and reliable command-line utility for publishing blog posts to any Micropub-compatible service. It supports publishing posts and drafts with content from command-line arguments, files, or stdin.
 
+**`mp` can also be used as a Rust library** for integrating Micropub publishing functionality into your own applications.
+
 ## Features
 
 - ✅ Publish posts directly to Micropub endpoints
@@ -14,6 +16,7 @@ A command-line tool to publish text-only blog posts to Micropub endpoints.
 - ✅ Configuration management with interactive setup
 - ✅ Quiet mode for scripting
 - ✅ Built with Rust for performance and reliability
+- ✅ **Library API for use in other Rust projects**
 
 ## Compatible Microblogging Services
 
@@ -35,6 +38,16 @@ cargo build --release
 
 The binary will be available at `target/release/mp`.
 
+### As a Library
+
+Add `mp` to your `Cargo.toml`:
+
+```toml
+[dependencies]
+mp = { path = "../mp" }  # Use appropriate path or version
+tokio = { version = "1.0", features = ["full"] }
+```
+
 ## Configuration
 
 Before using `mp`, you need to configure your Micropub service settings:
@@ -48,6 +61,58 @@ This will prompt you to enter:
 2. **Authentication Token**: Your Micropub authentication token
 
 The configuration is saved locally and will be used for all subsequent posts.
+
+## Library Usage
+
+If you want to use `mp` as a library in your Rust application:
+
+```rust
+use mp::{publish, publish_post, publish_draft, AppConfig, MicroblogService, PostStatus};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Create a MicroblogService configuration
+    let service = MicroblogService::new(
+        "https://micro.blog/micropub".to_string(),
+        "your-auth-token".to_string()
+    );
+    let app_config = AppConfig::new(service);
+    
+    // Publish a post
+    let result = publish_post(app_config, "Hello from the library!".to_string(), false).await?;
+    println!("Published at: {}", result.url);
+    
+    // Or use the more general publish function
+    let result = publish(
+        app_config, 
+        "Draft content".to_string(), 
+        PostStatus::Draft, 
+        false
+    ).await?;
+    
+    println!("Draft created at: {}", result.url);
+    
+    Ok(())
+}
+```
+
+### Loading Configuration from File
+
+You can also load configuration from the standard config file:
+
+```rust
+use mp::{publish_post, AppConfig};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Load existing configuration (same as CLI tool uses)
+    let app_config = AppConfig::load()?;
+    
+    let result = publish_post(app_config, "Post content".to_string(), true).await?;
+    
+    Ok(())
+}
+```
 
 ## Usage
 

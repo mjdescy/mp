@@ -11,6 +11,14 @@ readme = "README.md"
 keywords = ["micropub", "blog", "microblog", "cli"]
 categories = ["command-line-utilities"]
 
+[[bin]]
+name = "mp"
+path = "src/main.rs"
+
+[lib]
+name = "mp"
+path = "src/lib.rs"
+
 
 [dependencies]
 clap = { version = "4.5.43", features = ["cargo"] }

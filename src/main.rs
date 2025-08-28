@@ -1,13 +1,6 @@
-mod configure;
-mod get_content;
-mod publish;
-
 use clap::{arg, command, value_parser, Command};
 
-use crate::configure::handle_configure_verb;
-use crate::publish::{handle_draft_verb, handle_post_verb};
-use crate::configure::AppConfig;
-use crate::get_content::get_content_from_args;
+use mp::{publish_post, publish_draft, AppConfig, get_content::get_content_from_args, configure::handle_configure_verb};
 
 #[tokio::main]
 async fn main() {
@@ -70,7 +63,7 @@ async fn main() {
                     std::process::exit(1);
                 });
 
-                handle_post_verb(app_config, text, quiet)
+                publish_post(app_config, text, quiet)
                     .await
                     .unwrap_or_else(|e| {
                         eprintln!("Error publishing post:");
@@ -96,7 +89,7 @@ async fn main() {
                     std::process::exit(1);
                 });
 
-                handle_draft_verb(app_config, text, quiet)
+                publish_draft(app_config, text, quiet)
                     .await
                     .unwrap_or_else(|e| {
                         eprintln!("Error publishing draft:");

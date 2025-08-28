@@ -1,10 +1,10 @@
-pub(crate) mod microblog_service;
+pub mod microblog_service;
 mod app_config;
 mod user_input;
 
 use std::io;
-use crate::configure::microblog_service::MicroblogService;
 pub use crate::configure::app_config::AppConfig;
+pub use crate::configure::microblog_service::MicroblogService;
 use crate::configure::user_input::get_user_input;
 
 pub fn handle_configure_verb() -> io::Result<()> {
