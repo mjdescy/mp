@@ -4,16 +4,19 @@
 //! 
 //! ## Library Usage
 //! 
-//! ```rust
-//! use mp::{publish, AppConfig, PostStatus};
+//! ```no_run
+//! use mp::{publish, MicroblogService, PostStatus};
 //! 
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     // Load configuration
-//!     let app_config = AppConfig::load()?;
+//!     // Create a service configuration
+//!     let service = MicroblogService::new(
+//!         "https://micro.blog/micropub".to_string(),
+//!         "your-auth-token".to_string()
+//!     );
 //!     
 //!     // Publish a post
-//!     let result = publish(app_config, "Hello, world!".to_string(), PostStatus::Published, false).await?;
+//!     let result = publish(service, "Hello, world!".to_string(), PostStatus::Published, false).await?;
 //!     println!("Published: {}", result.url);
 //!     
 //!     Ok(())
@@ -25,8 +28,15 @@ pub mod get_content;
 pub mod publish;
 
 // Re-export the main types and functions for library users
-pub use configure::{AppConfig, MicroblogService};
+pub use configure::MicroblogService;
 pub use publish::{PostStatus, PostResult, PostError};
+
+// Keep AppConfig internal but accessible to this crate's binary
+use configure::app_config::AppConfig;
+
+// Hidden re-export for the binary only (not shown in docs)
+#[doc(hidden)]
+pub use configure::app_config::AppConfig as AppConfigInternal;
 
 /// The main publish function that can be used by library consumers.
 /// 
@@ -34,7 +44,7 @@ pub use publish::{PostStatus, PostResult, PostError};
 /// 
 /// # Arguments
 /// 
-/// * `app_config` - The application configuration containing service details
+/// * `service` - The microblog service configuration containing API URL and auth token
 /// * `post_content` - The content to publish
 /// * `post_status` - Whether to publish as a draft or published post
 /// * `quiet` - Whether to suppress output (only affects console output, not the result)
@@ -45,19 +55,22 @@ pub use publish::{PostStatus, PostResult, PostError};
 /// 
 /// # Example
 /// 
-/// ```rust
-/// use mp::{publish, AppConfig, PostStatus};
+/// ```no_run
+/// use mp::{publish, MicroblogService, PostStatus};
 /// 
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let app_config = AppConfig::load()?;
-///     let result = publish(app_config, "Hello, world!".to_string(), PostStatus::Published, false).await?;
+///     let service = MicroblogService::new(
+///         "https://micro.blog/micropub".to_string(),
+///         "your-auth-token".to_string()
+///     );
+///     let result = publish(service, "Hello, world!".to_string(), PostStatus::Published, false).await?;
 ///     println!("Published: {}", result.url);
 ///     Ok(())
 /// }
 /// ```
 pub async fn publish(
-    app_config: AppConfig, 
+    service: MicroblogService, 
     post_content: String, 
     post_status: PostStatus, 
     quiet: bool
@@ -73,7 +86,7 @@ pub async fn publish(
         println!("{}\n", post_content);
     }
 
-    let post = Post::new(post_content, post_status, app_config.service);
+    let post = Post::new(post_content, post_status, service);
     let post_result = post.publish().await;
     
     match post_result {
@@ -89,18 +102,49 @@ pub async fn publish(
 
 /// Convenience function to publish a post (non-draft)
 pub async fn publish_post(
-    app_config: AppConfig, 
+    service: MicroblogService, 
     post_content: String, 
     quiet: bool
 ) -> Result<PostResult, PostError> {
-    publish(app_config, post_content, PostStatus::Published, quiet).await
+    publish(service, post_content, PostStatus::Published, quiet).await
 }
 
 /// Convenience function to publish a draft
 pub async fn publish_draft(
+    service: MicroblogService, 
+    post_content: String, 
+    quiet: bool
+) -> Result<PostResult, PostError> {
+    publish(service, post_content, PostStatus::Draft, quiet).await
+}
+
+/// Internal helper function for the CLI - converts AppConfig to MicroblogService
+#[doc(hidden)]
+pub async fn publish_with_app_config(
+    app_config: AppConfig, 
+    post_content: String, 
+    post_status: PostStatus, 
+    quiet: bool
+) -> Result<PostResult, PostError> {
+    publish(app_config.service, post_content, post_status, quiet).await
+}
+
+/// Internal convenience function for CLI - publish post with AppConfig
+#[doc(hidden)]
+pub async fn publish_post_with_app_config(
     app_config: AppConfig, 
     post_content: String, 
     quiet: bool
 ) -> Result<PostResult, PostError> {
-    publish(app_config, post_content, PostStatus::Draft, quiet).await
+    publish_with_app_config(app_config, post_content, PostStatus::Published, quiet).await
+}
+
+/// Internal convenience function for CLI - publish draft with AppConfig
+#[doc(hidden)]
+pub async fn publish_draft_with_app_config(
+    app_config: AppConfig, 
+    post_content: String, 
+    quiet: bool
+) -> Result<PostResult, PostError> {
+    publish_with_app_config(app_config, post_content, PostStatus::Draft, quiet).await
 }

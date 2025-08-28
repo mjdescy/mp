@@ -1,6 +1,6 @@
 use clap::{arg, command, value_parser, Command};
 
-use mp::{publish_post, publish_draft, AppConfig, get_content::get_content_from_args, configure::handle_configure_verb};
+use mp::{publish_post_with_app_config, publish_draft_with_app_config, AppConfigInternal as AppConfig, get_content::get_content_from_args, configure::handle_configure_verb};
 
 #[tokio::main]
 async fn main() {
@@ -63,7 +63,7 @@ async fn main() {
                     std::process::exit(1);
                 });
 
-                publish_post(app_config, text, quiet)
+                publish_post_with_app_config(app_config, text, quiet)
                     .await
                     .unwrap_or_else(|e| {
                         eprintln!("Error publishing post:");
@@ -89,7 +89,7 @@ async fn main() {
                     std::process::exit(1);
                 });
 
-                publish_draft(app_config, text, quiet)
+                publish_draft_with_app_config(app_config, text, quiet)
                     .await
                     .unwrap_or_else(|e| {
                         eprintln!("Error publishing draft:");

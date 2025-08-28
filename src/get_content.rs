@@ -17,7 +17,7 @@ pub fn get_content_from_args(matches: &clap::ArgMatches) -> Result<String, std::
         ))
     };
 
-    if let Some(text) = content.ok() {
+    if let Ok(text) = content {
         if text.trim().is_empty() {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,

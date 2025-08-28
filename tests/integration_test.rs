@@ -1,4 +1,4 @@
-use mp::{AppConfig, MicroblogService, PostStatus};
+use mp::{MicroblogService, PostStatus};
 
 #[test]
 fn test_library_imports() {
@@ -8,9 +8,8 @@ fn test_library_imports() {
         "test-token".to_string()
     );
     
-    let config = AppConfig::new(service);
-    assert_eq!(config.service.api_url, "https://example.com/micropub");
-    assert_eq!(config.service.auth_token, "test-token");
+    assert_eq!(service.api_url, "https://example.com/micropub");
+    assert_eq!(service.auth_token, "test-token");
     
     // Test that PostStatus can be created and used
     let status = PostStatus::Published;

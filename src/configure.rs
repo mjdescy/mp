@@ -1,18 +1,16 @@
 pub mod microblog_service;
-mod app_config;
+pub(crate) mod app_config;
 mod user_input;
 
 use std::io;
-pub use crate::configure::app_config::AppConfig;
+use crate::configure::app_config::AppConfig;
 pub use crate::configure::microblog_service::MicroblogService;
 use crate::configure::user_input::get_user_input;
 
 pub fn handle_configure_verb() -> io::Result<()> {
-    if AppConfig::config_file_exists() {
-        if !user_opts_to_update_existing_config() {
-            println!("Configuration not updated. Exiting.");
-            return Ok(());
-        }
+    if AppConfig::config_file_exists() && !user_opts_to_update_existing_config() {
+        println!("Configuration not updated. Exiting.");
+        return Ok(());
     }
 
     let config = MicroblogService::from_user_input()?;
