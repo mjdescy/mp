@@ -34,10 +34,6 @@ pub use publish::{PostStatus, PostResult, PostError};
 // Keep AppConfig internal but accessible to this crate's binary
 use configure::app_config::AppConfig;
 
-// Hidden re-export for the binary only (not shown in docs)
-#[doc(hidden)]
-pub use configure::app_config::AppConfig as AppConfigInternal;
-
 /// The main publish function that can be used by library consumers.
 /// 
 /// This function publishes content to a Micropub endpoint.
@@ -127,24 +123,4 @@ pub async fn publish_with_app_config(
     quiet: bool
 ) -> Result<PostResult, PostError> {
     publish(app_config.service, post_content, post_status, quiet).await
-}
-
-/// Internal convenience function for CLI - publish post with AppConfig
-#[doc(hidden)]
-pub async fn publish_post_with_app_config(
-    app_config: AppConfig, 
-    post_content: String, 
-    quiet: bool
-) -> Result<PostResult, PostError> {
-    publish_with_app_config(app_config, post_content, PostStatus::Published, quiet).await
-}
-
-/// Internal convenience function for CLI - publish draft with AppConfig
-#[doc(hidden)]
-pub async fn publish_draft_with_app_config(
-    app_config: AppConfig, 
-    post_content: String, 
-    quiet: bool
-) -> Result<PostResult, PostError> {
-    publish_with_app_config(app_config, post_content, PostStatus::Draft, quiet).await
 }
