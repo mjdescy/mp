@@ -7,7 +7,7 @@ pub use crate::configure::microblog_service::MicroblogService;
 pub use crate::configure::app_config::AppConfig;
 use crate::configure::user_input::get_user_input;
 
-pub fn handle_configure_verb() -> io::Result<()> {
+pub fn configure_app() -> io::Result<()> {
     if AppConfig::config_file_exists() && !user_opts_to_update_existing_config() {
         println!("Configuration not updated. Exiting.");
         return Ok(());

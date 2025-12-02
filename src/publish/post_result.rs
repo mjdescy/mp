@@ -1,5 +1,6 @@
 use crate::publish::post_status::PostStatus;
 
+/// Represents a micropub endpoint's response to a request to publish a post.
 pub struct PostResult {
     pub url: String,
     pub preview: String,
@@ -8,6 +9,7 @@ pub struct PostResult {
 }
 
 impl PostResult {
+    /// Format the PostResult as a human-readable string.
     pub fn as_string(&self) -> String {
         format!(
             "{} successfully.\n\nURL:     {}\nPreview: {}\nEdit:    {}",
