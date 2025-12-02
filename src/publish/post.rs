@@ -66,3 +66,105 @@ impl Post {
         self.body.trim().is_empty()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_empty_with_empty_string() {
+        let post = Post::from_body("   \n\t  ".to_string(), PostStatus::Draft);
+        assert!(post.is_empty());
+    }
+
+    #[test]
+    fn test_is_empty_with_whitespace_only() {
+        let post = Post::from_body("   \n\t  ".to_string(), PostStatus::Draft);
+        assert!(post.is_empty());
+    }
+
+    #[test]
+    fn test_is_empty_with_content() {
+        let post = Post::from_body("Some content".to_string(), PostStatus::Draft);
+        assert!(!post.is_empty());
+    }
+
+    #[test]
+    fn test_from_body_creates_post_without_title() {
+        let post = Post::from_body("Body text".to_string(), PostStatus::Published);
+        assert_eq!(post.body, "Body text");
+        assert_eq!(post.title, None);
+        assert_eq!(post.status, PostStatus::Published);
+    }
+
+    #[test]
+    fn test_from_body_and_title_creates_post_with_title() {
+        let post = Post::from_body_and_title("Body".to_string(), "Title".to_string(), PostStatus::Draft);
+        assert_eq!(post.body, "Body");
+        assert_eq!(post.title, Some("Title".to_string()));
+        assert_eq!(post.status, PostStatus::Draft);
+    }
+
+    #[test]
+    fn test_from_body_with_title_extraction_extracts_title() {
+        let post = Post::from_body_with_title_extraction("# Title\n\nBody".to_string(), PostStatus::Published);
+        assert_eq!(post.title, Some("Title".to_string()));
+        assert_eq!(post.body, "Body");
+        assert_eq!(post.status, PostStatus::Published);
+    }
+
+    #[test]
+    fn test_from_body_with_title_extraction_no_title() {
+        let post = Post::from_body_with_title_extraction("Just body".to_string(), PostStatus::Draft);
+        assert_eq!(post.title, None);
+        assert_eq!(post.body, "Just body");
+    }
+
+    #[test]
+    fn test_separate_title_from_body_heading_1_in_first_line() {
+        let body = "# My Title\nThis is the body".to_string();
+        let (remaining_body, title) = Post::separate_title_from_body(body);
+        assert_eq!(title, Some("My Title".to_string()));
+        assert_eq!(remaining_body, "This is the body");
+    }
+
+    #[test]
+    fn test_separate_title_from_body_heading_2_in_first_line() {
+        let body = "## My Title\nThis is the body".to_string();
+        let (remaining_body, title) = Post::separate_title_from_body(body);
+        assert_eq!(title, None);
+        assert_eq!(remaining_body, "## My Title\nThis is the body");
+    }
+
+    #[test]
+    fn test_separate_title_from_body_blank_line_then_heading_1() {
+        let body = "\n# My Title\nThis is the body".to_string();
+        let (remaining_body, title) = Post::separate_title_from_body(body);
+        assert_eq!(title, None);
+        assert_eq!(remaining_body, "\n# My Title\nThis is the body");
+    }
+
+    #[test]
+    fn test_separate_title_from_body_no_blank_line_between() {
+        let body = "# My Title\nThis is the body".to_string();
+        let (remaining_body, title) = Post::separate_title_from_body(body);
+        assert_eq!(title, Some("My Title".to_string()));
+        assert_eq!(remaining_body, "This is the body");
+    }
+
+    #[test]
+    fn test_separate_title_from_body_one_blank_line_between() {
+        let body = "# My Title\n\nThis is the body".to_string();
+        let (remaining_body, title) = Post::separate_title_from_body(body);
+        assert_eq!(title, Some("My Title".to_string()));
+        assert_eq!(remaining_body, "This is the body");
+    }
+
+    #[test]
+    fn test_separate_title_from_body_multiple_blank_lines_between() {
+        let body = "# My Title\n\n\n\nThis is the body".to_string();
+        let (remaining_body, title) = Post::separate_title_from_body(body);
+        assert_eq!(title, Some("My Title".to_string()));
+        assert_eq!(remaining_body, "This is the body");
+    }
+}
