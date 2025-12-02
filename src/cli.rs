@@ -52,7 +52,7 @@ fn common_content_args() -> Vec<clap::Arg> {
             .value_parser(value_parser!(String)),
         arg!(-s --stdin "Read content from stdin")
             .action(clap::ArgAction::SetTrue),
-        arg!(-e --extract-title "Extract title from content if it starts with a markdown level 1 header")
+        arg!(-e --"extract-title" "Extract title from content if it starts with a markdown level 1 header")
             .action(clap::ArgAction::SetTrue),
         arg!(-q --quiet "Suppress output")
             .action(clap::ArgAction::SetTrue),
