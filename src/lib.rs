@@ -15,19 +15,30 @@
 //!         "your-auth-token".to_string()
 //!     );
 //!     
-//!     // Publish a post
-//!     let result = publish(service, "Hello, world!".to_string(), None, PostStatus::Published, false).await?;
+//!     // PublCreate a post to publish
+//!     let post - publish::post::Post::from_body_and_title(
+//!         "Hello, world!".to_string(),
+//!         "My First Post".to_string(),
+//!         PostStatus::Published
+//!     );
+//!     
+//!     // Publish the post
+//!     let result = publish_post(
+//!     post,
+//!    service
+//!     ).await?;
 //!     println!("Published: {}", result.url);
 //!     
 //!     Ok(())
 //! }
 //! ```
 
+pub mod configuration;
+mod publish;
 pub mod cli;
-pub mod configure;
-pub mod publish;
 
 // Re-export the main types and functions for library users
-pub use configure::MicroblogService;
-pub use publish::{PostStatus, PostResult, PostError};
-pub use publish::publish_post;
+pub use crate::configuration::microblog_service::MicroblogService;
+pub use crate::publish::{PostResult, PostError, publish_post};
+pub use crate::publish::post::Post;
+pub use crate::publish::post_status::PostStatus;

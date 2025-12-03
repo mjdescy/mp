@@ -2,9 +2,10 @@
 //!
 //! This module handles all CLI argument parsing and command execution.
 
-use clap::{arg, command, value_parser, Command};
+mod configure_subcommand;
+mod post_and_draft_subcommands;
 
-pub mod sub_commands;
+use clap::{arg, command, value_parser, Command};
 
 /// Main entry point for the CLI application.
 /// Parses command-line arguments and executes the appropriate command.
@@ -28,11 +29,11 @@ pub async fn run() {
 
     // Dispatch to the appropriate subcommand handler
     if let Some(post_matches) = matches.subcommand_matches("post") {
-        sub_commands::handle_post_or_draft_subcommand(post_matches).await;
+        post_and_draft_subcommands::handle_post_or_draft_subcommand(post_matches).await;
     } else if let Some(draft_matches) = matches.subcommand_matches("draft") {
-        sub_commands::handle_post_or_draft_subcommand(draft_matches).await;
+        post_and_draft_subcommands::handle_post_or_draft_subcommand(draft_matches).await;
     } else if matches.subcommand_matches("configure").is_some() {
-        sub_commands::handle_configure_subcommand();
+        configure_subcommand::handle_configure_subcommand();
     } else {
         eprintln!("Error:");
         eprintln!("No subcommand was used.\n");

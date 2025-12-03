@@ -1,18 +1,21 @@
+use std::env::home_dir;
 use std::fs;
 use std::io;
 use std::path::Path;
-use std::env::home_dir;
 use serde::{Deserialize, Serialize};
-use crate::configure::microblog_service::MicroblogService;
+
+use crate::configuration::microblog_service::MicroblogService;
+use crate::configuration::default_behavior::DefaultBehavior;
 
 #[derive(Serialize, Deserialize)]
 pub struct AppConfig {
     pub service: MicroblogService,
+    pub default_behavior: DefaultBehavior,
 }
 
 impl AppConfig {
-    pub fn new(service: MicroblogService) -> Self {
-        AppConfig { service }
+    pub fn new(service: MicroblogService, default_behavior: DefaultBehavior) -> Self {
+        AppConfig { service, default_behavior }
     }
 
     pub fn get_config_file_path() -> io::Result<String> {

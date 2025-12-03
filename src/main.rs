@@ -1,7 +1,7 @@
-use mp::cli;
+use mp::cli::run;
 
 /// Main entry point for the CLI application.
 #[tokio::main]
 async fn main() {
-    cli::run().await;
+    run().await;
 }

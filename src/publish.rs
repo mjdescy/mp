@@ -1,24 +1,25 @@
 pub mod post;
-pub mod post_result;
 pub mod post_status;
+pub mod post_result;
 
 use std::time::Duration;
+
 use reqwest::ClientBuilder;
 use serde_json::from_str;
 use serde::Deserialize;
 use thiserror::Error;
 
-use crate::{publish::post::Post, MicroblogService};
+pub use crate::configuration::microblog_service::MicroblogService;
+use crate::publish::post::Post;
 
 pub use crate::publish::post_result::PostResult;
-pub use crate::publish::post_status::PostStatus;
 
 const DEFAULT_TIMEOUT_SECS: u64 = 5;
 
 /// Publish a Post via a Micropub service.
 pub async fn publish_post(
     post: Post,
-    service: MicroblogService,
+    service: &MicroblogService,
 ) -> Result<PostResult, PostError> {
     if post.is_empty() {
         return Err(PostError::InvalidInput("Post content cannot be empty".to_string()));

@@ -1,6 +1,5 @@
 use std::io;
 use serde::{Deserialize, Serialize};
-use crate::configure::user_input::{get_user_input};
 
 #[derive(Serialize, Deserialize)]
 pub struct MicroblogService {
@@ -21,15 +20,5 @@ impl MicroblogService {
             ));
         }
         Ok(MicroblogService::new(api_url, auth_token))
-    }
-
-    pub fn from_user_input() -> io::Result<Self> {        
-        println!("=============================================");
-        println!("Define the micoblogging service to publish to");
-        println!("=============================================");
-        let api_url = get_user_input("[Step 1 of 2] Enter API URL");
-        let auth_token = get_user_input("[Step 2 of 2] Enter Authentication Token");
-
-        Self::from_args(api_url, auth_token)
     }
 }
