@@ -1,4 +1,4 @@
-use crate::publish::post_status::PostStatus;
+use crate::post_status::PostStatus;
 
 /// Represents a post to be published.
 pub struct Post {

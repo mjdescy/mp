@@ -1,10 +1,10 @@
+use mplib::MicroblogService;
 use std::env::home_dir;
 use std::fs;
 use std::io;
 use std::path::Path;
 use serde::{Deserialize, Serialize};
 
-use crate::configuration::microblog_service::MicroblogService;
 use crate::configuration::default_behavior::DefaultBehavior;
 
 #[derive(Serialize, Deserialize)]

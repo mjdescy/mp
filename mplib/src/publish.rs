@@ -1,7 +1,3 @@
-pub mod post;
-pub mod post_status;
-pub mod post_result;
-
 use std::time::Duration;
 
 use reqwest::ClientBuilder;
@@ -9,10 +5,10 @@ use serde_json::from_str;
 use serde::Deserialize;
 use thiserror::Error;
 
-pub use crate::configuration::microblog_service::MicroblogService;
-use crate::publish::post::Post;
+pub use crate::microblog_service::MicroblogService;
+use crate::post::Post;
 
-pub use crate::publish::post_result::PostResult;
+pub use crate::post_result::PostResult;
 
 const DEFAULT_TIMEOUT_SECS: u64 = 5;
 

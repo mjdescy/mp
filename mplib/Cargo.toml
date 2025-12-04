@@ -1,0 +1,18 @@
+[package]
+name = "mplib"
+version = "0.1.0"
+edition = "2024"
+description = "mplib: Micropub Publisher Library | Publish text-only blog posts to Micropub endpoints."
+authors = ["Michael Descy <mike@mjdescy.me>"]
+license = "MIT"
+homepage = "https://github.com/mjdescy/mp"
+repository = "https://github.com/mjdescy/mp"
+readme = "README.md"
+keywords = ["micropub", "blog", "microblog"]
+categories = ["web-programming"]
+
+[dependencies]
+reqwest = "0.12.24"
+serde = "1.0.228"
+serde_json = "1.0.145"
+thiserror = "2.0.17"

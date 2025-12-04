@@ -1,4 +1,3 @@
-
 /// Represents the status of a post, either published or draft.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PostStatus {

@@ -1,14 +1,10 @@
 //! Handle the 'post' and 'draft' subcommands for the CLI application.
 
 use clap::ArgMatches;
-use std::fs;
-use std::io;
-use std::io::Read;
+use mplib::{Post, PostStatus, publish_post};
+use std::{fs, io, io::Read};
 
 use crate::configuration::app_config::AppConfig;
-use crate::publish::post::Post;
-use crate::publish::post_status::PostStatus;
-use crate::publish::publish_post;
 
 /// Handle the 'post' or 'draft' subcommand.
 pub async fn handle_post_or_draft_subcommand(matches: &ArgMatches) {

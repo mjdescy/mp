@@ -1,0 +1,25 @@
+[package]
+name = "mpcli"
+version = "0.1.0"
+edition = "2024"
+description = "mpcli: Micropub Publisher CLI | Publish text-only blog posts to Micropub endpoints via a command-line interface."
+authors = ["Michael Descy <mike@mjdescy.me>"]
+license = "MIT"
+homepage = "https://github.com/mjdescy/mp"
+repository = "https://github.com/mjdescy/mp"
+readme = "README.md"
+keywords = ["micropub", "blog", "microblog", "cli"]
+categories = ["command-line-utilities"]
+
+[[bin]]
+name = "mp"
+path = "src/main.rs"
+
+[dependencies]
+mplib = { path = "../mplib" }
+clap = { version = "4.5.43", features = ["cargo"] }
+rustyline = "17.0.0"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.142"
+tokio = { version = "1.0", features = ["full"] }
+toml = "0.8"

@@ -1,31 +1,6 @@
-[package]
-name = "mp"
-version = "1.1.0"
-edition = "2024"
-description = "mp: Micropub Publisher | A command-line tool to publish text-only blog posts to Micropub endpoints."
-authors = ["Michael Descy <mike@mjdescy.me>"]
-license = "MIT"
-homepage = "https://github.com/mjdescy/mp"
-repository = "https://github.com/mjdescy/mp"
-readme = "README.md"
-keywords = ["micropub", "blog", "microblog", "cli"]
-categories = ["command-line-utilities"]
-
-[[bin]]
-name = "mp"
-path = "src/main.rs"
-
-[lib]
-name = "mp"
-path = "src/lib.rs"
-
-
-[dependencies]
-clap = { version = "4.5.43", features = ["cargo"] }
-reqwest = { version = "0.12.23", features = ["json"] }
-rustyline = "17.0.0"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.142"
-thiserror = "2.0.14"
-tokio = { version = "1.0", features = ["full"] }
-toml = "0.8"
+[workspace]
+resolver = "3"
+members = [
+    "mplib",
+    "mpcli",
+]

@@ -2,10 +2,10 @@
 
 use std::io;
 use rustyline::DefaultEditor;
+use mplib::MicroblogService;
 
 use crate::configuration::default_behavior::DefaultBehavior;
 use crate::configuration::app_config::AppConfig;
-use crate::configuration::microblog_service::MicroblogService;
 
 /// Handle the 'configure' subcommand.
 pub fn handle_configure_subcommand() {
@@ -40,7 +40,11 @@ fn user_opts_to_update_existing_config() -> bool {
     response.trim().eq_ignore_ascii_case("y")
 }
 
-impl AppConfig {
+trait UserInputConfigurable: Sized {
+    fn from_user_input() -> io::Result<Self>;
+}
+
+impl UserInputConfigurable for AppConfig {
     fn from_user_input() -> io::Result<Self> {
         let microblog_service = MicroblogService::from_user_input()?;
         let default_behavior = DefaultBehavior::from_user_input()?;
@@ -50,7 +54,7 @@ impl AppConfig {
     }
 }
 
-impl MicroblogService {
+impl UserInputConfigurable for MicroblogService {
     fn from_user_input() -> io::Result<Self> {
         println!();
         println!("==============================================");
@@ -64,7 +68,7 @@ impl MicroblogService {
     }
 }
 
-impl DefaultBehavior {
+impl UserInputConfigurable for DefaultBehavior {
     fn from_user_input() -> io::Result<Self> {
         println!();
         println!("=======================================================");
