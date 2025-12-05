@@ -2,14 +2,14 @@ use std::io;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-pub struct MicroblogService {
+pub struct MicropubService {
     pub api_url: String,
     pub auth_token: String,
 }
  
-impl MicroblogService {
+impl MicropubService {
     pub fn new(api_url: String, auth_token: String) -> Self {
-        MicroblogService { api_url, auth_token }
+        MicropubService { api_url, auth_token }
     }
 
     pub fn from_args(api_url: String, auth_token: String) -> io::Result<Self> {
@@ -19,6 +19,6 @@ impl MicroblogService {
                 "API URL and authentication token must not be empty",
             ));
         }
-        Ok(MicroblogService::new(api_url, auth_token))
+        Ok(MicropubService::new(api_url, auth_token))
     }
 }

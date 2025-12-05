@@ -1,9 +1,9 @@
-use mp::{MicroblogService, PostStatus};
+use mp::{MicropubService, PostStatus};
 
 #[test]
 fn test_library_imports() {
     // Test that we can create the types that should be exported
-    let service = MicroblogService::new(
+    let service = MicropubService::new(
         "https://example.com/micropub".to_string(),
         "test-token".to_string()
     );
@@ -21,7 +21,7 @@ fn test_library_imports() {
 
 #[test]
 fn test_microblog_service_from_args() {
-    let result = MicroblogService::from_args(
+    let result = MicropubService::from_args(
         "https://test.com/micropub".to_string(),
         "secret-token".to_string()
     );
@@ -34,14 +34,14 @@ fn test_microblog_service_from_args() {
 
 #[test]
 fn test_microblog_service_from_args_empty() {
-    let result = MicroblogService::from_args(
+    let result = MicropubService::from_args(
         "".to_string(),
         "token".to_string()
     );
     
     assert!(result.is_err());
     
-    let result2 = MicroblogService::from_args(
+    let result2 = MicropubService::from_args(
         "https://test.com".to_string(),
         "".to_string()
     );

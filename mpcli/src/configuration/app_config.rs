@@ -1,4 +1,4 @@
-use mplib::MicroblogService;
+use mplib::MicropubService;
 use std::env::home_dir;
 use std::fs;
 use std::io;
@@ -9,12 +9,12 @@ use crate::configuration::default_behavior::DefaultBehavior;
 
 #[derive(Serialize, Deserialize)]
 pub struct AppConfig {
-    pub service: MicroblogService,
+    pub service: MicropubService,
     pub default_behavior: DefaultBehavior,
 }
 
 impl AppConfig {
-    pub fn new(service: MicroblogService, default_behavior: DefaultBehavior) -> Self {
+    pub fn new(service: MicropubService, default_behavior: DefaultBehavior) -> Self {
         AppConfig { service, default_behavior }
     }
 

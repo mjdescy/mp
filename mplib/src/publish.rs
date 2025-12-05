@@ -5,7 +5,7 @@ use serde_json::from_str;
 use serde::Deserialize;
 use thiserror::Error;
 
-pub use crate::microblog_service::MicroblogService;
+pub use crate::micropub_service::MicropubService;
 use crate::post::Post;
 
 pub use crate::post_result::PostResult;
@@ -15,7 +15,7 @@ const DEFAULT_TIMEOUT_SECS: u64 = 5;
 /// Publish a Post via a Micropub service.
 pub async fn publish_post(
     post: Post,
-    service: &MicroblogService,
+    service: &MicropubService,
 ) -> Result<PostResult, PostError> {
     if post.is_empty() {
         return Err(PostError::InvalidInput("Post content cannot be empty".to_string()));
@@ -59,7 +59,7 @@ fn build_client() -> Result<reqwest::Client, PostError> {
 async fn send_post_request(
     client: &reqwest::Client,
     post: Post,
-    microblog_service: &MicroblogService,
+    microblog_service: &MicropubService,
 ) -> Result<reqwest::Response, PostError> {
     // Prepare form parameters. If post has a title, include it. Otherwise, omit it.
     let params = [

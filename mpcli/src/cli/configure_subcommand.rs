@@ -2,7 +2,7 @@
 
 use std::io;
 use rustyline::DefaultEditor;
-use mplib::MicroblogService;
+use mplib::MicropubService;
 
 use crate::configuration::default_behavior::DefaultBehavior;
 use crate::configuration::app_config::AppConfig;
@@ -46,7 +46,7 @@ trait UserInputConfigurable: Sized {
 
 impl UserInputConfigurable for AppConfig {
     fn from_user_input() -> io::Result<Self> {
-        let microblog_service = MicroblogService::from_user_input()?;
+        let microblog_service = MicropubService::from_user_input()?;
         let default_behavior = DefaultBehavior::from_user_input()?;
 
         let app_config = AppConfig::new(microblog_service, default_behavior); 
@@ -54,7 +54,7 @@ impl UserInputConfigurable for AppConfig {
     }
 }
 
-impl UserInputConfigurable for MicroblogService {
+impl UserInputConfigurable for MicropubService {
     fn from_user_input() -> io::Result<Self> {
         println!();
         println!("==============================================");
