@@ -16,7 +16,7 @@ name = "mp"
 path = "src/main.rs"
 
 [dependencies]
-mplib = { path = "../mplib" }
+mplib = { version = "0.1.0" }
 clap = { version = "4.5.43", features = ["cargo"] }
 rustyline = "17.0.0"
 serde = { version = "1.0.219", features = ["derive"] }
