@@ -5,7 +5,7 @@
 mod configure_subcommand;
 mod post_and_draft_subcommands;
 
-use clap::{arg, command, value_parser, Command};
+use clap::{Command, arg, command, value_parser};
 
 /// Main entry point for the CLI application.
 /// Parses command-line arguments and executes the appropriate command.
@@ -14,16 +14,16 @@ pub async fn run() {
         .subcommand(
             Command::new("post")
                 .about("Publish a post")
-                .args(common_content_args())
+                .args(common_content_args()),
         )
         .subcommand(
             Command::new("draft")
                 .about("Create a draft")
-                .args(common_content_args())
+                .args(common_content_args()),
         )
         .subcommand(
             Command::new("configure")
-                .about("Create a configuration file containing your authentication token")
+                .about("Create a configuration file containing your authentication token"),
         )
         .get_matches();
 

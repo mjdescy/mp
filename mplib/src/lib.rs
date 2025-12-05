@@ -1,12 +1,12 @@
 //! # mplib - Micropub Publisher Library
-//! 
+//!
 //! A Rust library for publishing text-only blog posts to Micropub endpoints.
-//! 
+//!
 //! ## Example
-//! 
+//!
 //!! ```rust
 //! use mplib::{MicropubService, Post, publish_post};
-//! 
+//!
 //! fn main() {
 //!     let service = MicropubService::new("https://example.com/micropub", "your_access_token");
 //!     let post = Post::new("Hello, world!", None);

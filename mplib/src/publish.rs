@@ -1,8 +1,8 @@
 use std::time::Duration;
 
 use reqwest::ClientBuilder;
-use serde_json::from_str;
 use serde::Deserialize;
+use serde_json::from_str;
 use thiserror::Error;
 
 pub use crate::micropub_service::MicropubService;
@@ -13,18 +13,16 @@ pub use crate::post_result::PostResult;
 const DEFAULT_TIMEOUT_SECS: u64 = 5;
 
 /// Publish a Post via a Micropub service.
-pub async fn publish_post(
-    post: Post,
-    service: &MicropubService,
-) -> Result<PostResult, PostError> {
+pub async fn publish_post(post: Post, service: &MicropubService) -> Result<PostResult, PostError> {
     if post.is_empty() {
-        return Err(PostError::InvalidInput("Post content cannot be empty".to_string()));
+        return Err(PostError::InvalidInput(
+            "Post content cannot be empty".to_string(),
+        ));
     }
 
     let client = build_client()?;
     let post_status = post.status.clone();
-    let response = send_post_request(
-        &client, post, &service).await?;
+    let response = send_post_request(&client, post, &service).await?;
 
     let status = response.status();
     let text: String = response.text().await?;
@@ -67,9 +65,9 @@ async fn send_post_request(
         ("content", post.body.as_str()),
         ("post-status", post.status.as_str()),
     ]
-        .into_iter()
-        .chain(post.title.as_ref().map(|t| ("name", t.as_str())))
-        .collect::<Vec<_>>();
+    .into_iter()
+    .chain(post.title.as_ref().map(|t| ("name", t.as_str())))
+    .collect::<Vec<_>>();
 
     // Send the POST request.
     client
@@ -108,4 +106,3 @@ struct ApiPostError {
     error: String,
     error_description: String,
 }
-

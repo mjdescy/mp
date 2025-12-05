@@ -1,5 +1,5 @@
-use std::io;
 use serde::{Deserialize, Serialize};
+use std::io;
 
 #[derive(Serialize, Deserialize)]
 pub struct DefaultBehavior {
@@ -9,7 +9,10 @@ pub struct DefaultBehavior {
 
 impl DefaultBehavior {
     pub fn new(quiet: bool, extract_title: bool) -> Self {
-        DefaultBehavior { quiet, extract_title }
+        DefaultBehavior {
+            quiet,
+            extract_title,
+        }
     }
 
     pub fn from_args(quiet: String, extract_title: String) -> io::Result<Self> {

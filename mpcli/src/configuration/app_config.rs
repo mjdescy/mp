@@ -1,9 +1,9 @@
 use mplib::MicropubService;
+use serde::{Deserialize, Serialize};
 use std::env::home_dir;
 use std::fs;
 use std::io;
 use std::path::Path;
-use serde::{Deserialize, Serialize};
 
 use crate::configuration::default_behavior::DefaultBehavior;
 
@@ -15,12 +15,18 @@ pub struct AppConfig {
 
 impl AppConfig {
     pub fn new(service: MicropubService, default_behavior: DefaultBehavior) -> Self {
-        AppConfig { service, default_behavior }
+        AppConfig {
+            service,
+            default_behavior,
+        }
     }
 
     pub fn get_config_file_path() -> io::Result<String> {
         let home = home_dir().ok_or_else(|| {
-            io::Error::new(io::ErrorKind::NotFound, "Could not determine home directory")
+            io::Error::new(
+                io::ErrorKind::NotFound,
+                "Could not determine home directory",
+            )
         })?;
 
         let config_path = home.join(".config").join("mp").join("config.toml");
@@ -58,9 +64,12 @@ impl AppConfig {
     pub fn save(&self) -> io::Result<String> {
         let config_path = AppConfig::get_config_file_path()?;
         fs::create_dir_all(Path::new(&config_path).parent().unwrap())?;
-        
+
         let config_content = toml::to_string(self).map_err(|e| {
-            io::Error::new(io::ErrorKind::InvalidData, format!("Failed to serialize config: {}", e))
+            io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!("Failed to serialize config: {}", e),
+            )
         })?;
 
         fs::write(&config_path, config_content)?;

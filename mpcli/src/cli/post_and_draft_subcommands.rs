@@ -25,7 +25,8 @@ pub async fn handle_post_or_draft_subcommand(matches: &ArgMatches) {
         PostStatus::Draft => "draft",
     };
 
-    let extract_title = app_config.default_behavior.extract_title || matches.get_flag("extract-title");
+    let extract_title =
+        app_config.default_behavior.extract_title || matches.get_flag("extract-title");
 
     let post = post_from_args(&matches, status, extract_title).unwrap();
 
@@ -51,14 +52,14 @@ pub async fn handle_post_or_draft_subcommand(matches: &ArgMatches) {
     }
 }
 
-
 /// Construct a Post from CLI arguments.
 fn post_from_args(
-    matches: &ArgMatches, 
-    status: PostStatus, 
-    extract_title_default: bool)
--> Result<Post, String> {
-    let body = get_post_body_from_cli_args(matches).map_err(|e| format!("Error reading content: {}", e))?;
+    matches: &ArgMatches,
+    status: PostStatus,
+    extract_title_default: bool,
+) -> Result<Post, String> {
+    let body = get_post_body_from_cli_args(matches)
+        .map_err(|e| format!("Error reading content: {}", e))?;
     let title = matches.get_one::<String>("title").cloned();
     let extract_title = title.is_none() && extract_title_default;
 
@@ -84,7 +85,7 @@ fn get_post_body_from_cli_args(matches: &ArgMatches) -> Result<String, std::io::
     } else {
         Err(std::io::Error::new(
             std::io::ErrorKind::InvalidInput,
-            "Either provide content as an argument, use --file with a path, or use --stdin."
+            "Either provide content as an argument, use --file with a path, or use --stdin.",
         ))
     }
 }

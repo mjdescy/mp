@@ -99,7 +99,8 @@ mod tests {
 
     #[test]
     fn test_from_body_and_title_creates_post_with_title() {
-        let post = Post::from_body_and_title("Body".to_string(), "Title".to_string(), PostStatus::Draft);
+        let post =
+            Post::from_body_and_title("Body".to_string(), "Title".to_string(), PostStatus::Draft);
         assert_eq!(post.body, "Body");
         assert_eq!(post.title, Some("Title".to_string()));
         assert_eq!(post.status, PostStatus::Draft);
@@ -107,7 +108,10 @@ mod tests {
 
     #[test]
     fn test_from_body_with_title_extraction_extracts_title() {
-        let post = Post::from_body_with_title_extraction("# Title\n\nBody".to_string(), PostStatus::Published);
+        let post = Post::from_body_with_title_extraction(
+            "# Title\n\nBody".to_string(),
+            PostStatus::Published,
+        );
         assert_eq!(post.title, Some("Title".to_string()));
         assert_eq!(post.body, "Body");
         assert_eq!(post.status, PostStatus::Published);
@@ -115,7 +119,8 @@ mod tests {
 
     #[test]
     fn test_from_body_with_title_extraction_no_title() {
-        let post = Post::from_body_with_title_extraction("Just body".to_string(), PostStatus::Draft);
+        let post =
+            Post::from_body_with_title_extraction("Just body".to_string(), PostStatus::Draft);
         assert_eq!(post.title, None);
         assert_eq!(post.body, "Just body");
     }

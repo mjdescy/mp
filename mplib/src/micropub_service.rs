@@ -1,15 +1,18 @@
-use std::io;
 use serde::{Deserialize, Serialize};
+use std::io;
 
 #[derive(Serialize, Deserialize)]
 pub struct MicropubService {
     pub api_url: String,
     pub auth_token: String,
 }
- 
+
 impl MicropubService {
     pub fn new(api_url: String, auth_token: String) -> Self {
-        MicropubService { api_url, auth_token }
+        MicropubService {
+            api_url,
+            auth_token,
+        }
     }
 
     pub fn from_args(api_url: String, auth_token: String) -> io::Result<Self> {
