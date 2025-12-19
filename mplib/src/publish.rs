@@ -22,7 +22,7 @@ pub async fn publish_post(post: Post, service: &MicropubService) -> Result<PostR
 
     let client = build_client()?;
     let post_status = post.status.clone();
-    let response = send_post_request(&client, post, &service).await?;
+    let response = send_post_request(&client, post, service).await?;
 
     let status = response.status();
     let text: String = response.text().await?;

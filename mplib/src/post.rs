@@ -46,8 +46,8 @@ impl Post {
         // between the title and the rest of the body.
         let mut lines = body.lines();
         if let Some(first_line) = lines.next() {
-            if first_line.starts_with("# ") {
-                let extracted_title = first_line[2..].trim().to_string();
+            if let Some(title_text) = first_line.strip_prefix("# ") {
+                let extracted_title = title_text.trim().to_string();
                 let remaining_body: String = lines
                     .skip_while(|line| line.trim().is_empty())
                     .collect::<Vec<&str>>()

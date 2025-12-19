@@ -28,7 +28,7 @@ pub async fn handle_post_or_draft_subcommand(matches: &ArgMatches) {
     let extract_title =
         app_config.default_behavior.extract_title || matches.get_flag("extract-title");
 
-    let post = post_from_args(&matches, status, extract_title).unwrap();
+    let post = post_from_args(matches, status, extract_title).unwrap();
 
     if post.is_empty() {
         eprintln!("Error: {} content cannot be empty", post_or_draft);
@@ -64,11 +64,11 @@ fn post_from_args(
     let extract_title = title.is_none() && extract_title_default;
 
     if extract_title {
-        return Ok(Post::from_body_with_title_extraction(body, status));
+        Ok(Post::from_body_with_title_extraction(body, status))
     } else if title.is_some() {
-        return Ok(Post::from_body_and_title(body, title.unwrap(), status));
+        Ok(Post::from_body_and_title(body, title.unwrap(), status))
     } else {
-        return Ok(Post::from_body(body, status));
+        Ok(Post::from_body(body, status))
     }
 }
 
