@@ -16,7 +16,7 @@ name = "mp"
 path = "src/main.rs"
 
 [dependencies]
-mplib = { version = "0.1.1" }
+mplib = { path = "../mplib", version = "0.1.1" }
 clap = { version = "4.5.43", features = ["cargo"] }
 directories = "5.0"
 rustyline = "17.0.0"

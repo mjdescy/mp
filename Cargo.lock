@@ -721,24 +721,12 @@ version = "0.1.1"
 dependencies = [
  "clap",
  "directories",
- "mplib 0.1.0",
+ "mplib",
  "rustyline",
  "serde",
  "serde_json",
  "tokio",
  "toml",
-]
-
-[[package]]
-name = "mplib"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9da96b0199098b78dc865993558a79a1ebeeb025c0d56648d0941a2bced4a6bf"
-dependencies = [
- "reqwest",
- "serde",
- "serde_json",
- "thiserror 2.0.17",
 ]
 
 [[package]]
