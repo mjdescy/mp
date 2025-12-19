@@ -1,6 +1,6 @@
 [package]
 name = "mpcli"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "mpcli: Micropub Publisher CLI | Publish text-only blog posts to Micropub endpoints via a command-line interface."
 authors = ["Michael Descy <mike@mjdescy.me>"]
@@ -16,7 +16,7 @@ name = "mp"
 path = "src/main.rs"
 
 [dependencies]
-mplib = { version = "0.1.0" }
+mplib = { version = "0.1.1" }
 clap = { version = "4.5.43", features = ["cargo"] }
 directories = "5.0"
 rustyline = "17.0.0"

@@ -717,11 +717,11 @@ dependencies = [
 
 [[package]]
 name = "mpcli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "clap",
  "directories",
- "mplib 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "mplib 0.1.0",
  "rustyline",
  "serde",
  "serde_json",
@@ -732,6 +732,8 @@ dependencies = [
 [[package]]
 name = "mplib"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9da96b0199098b78dc865993558a79a1ebeeb025c0d56648d0941a2bced4a6bf"
 dependencies = [
  "reqwest",
  "serde",
@@ -741,9 +743,7 @@ dependencies = [
 
 [[package]]
 name = "mplib"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9da96b0199098b78dc865993558a79a1ebeeb025c0d56648d0941a2bced4a6bf"
+version = "0.1.1"
 dependencies = [
  "reqwest",
  "serde",
