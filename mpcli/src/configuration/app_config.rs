@@ -1,6 +1,6 @@
+use directories::ProjectDirs;
 use mplib::MicropubService;
 use serde::{Deserialize, Serialize};
-use std::env::home_dir;
 use std::fs;
 use std::io;
 use std::path::Path;
@@ -22,14 +22,14 @@ impl AppConfig {
     }
 
     pub fn get_config_file_path() -> io::Result<String> {
-        let home = home_dir().ok_or_else(|| {
+        let proj_dirs = ProjectDirs::from("", "", "mp").ok_or_else(|| {
             io::Error::new(
                 io::ErrorKind::NotFound,
-                "Could not determine home directory",
+                "Could not determine project directories",
             )
         })?;
 
-        let config_path = home.join(".config").join("mp").join("config.toml");
+        let config_path = proj_dirs.config_dir().join("config.toml");
 
         Ok(config_path.to_str().unwrap().to_string())
     }
