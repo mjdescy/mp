@@ -1,0 +1,179 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: false
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macOS builds (native)
+          - target: x86_64-apple-darwin
+            os: macos-latest
+            name: mp-macos-intel-x86_64
+          - target: aarch64-apple-darwin
+            os: macos-latest
+            name: mp-macos-apple-silicon-aarch64
+          # Linux build
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            name: mp-linux-x86_64
+          # Windows builds
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            name: mp-windows-x86_64
+          - target: aarch64-pc-windows-msvc
+            os: windows-latest
+            name: mp-windows-aarch64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ matrix.target }}
+
+    - name: Cache Cargo registry
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ matrix.target }}-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-${{ matrix.target }}-
+          ${{ runner.os }}-cargo-
+
+    - name: Install system dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pkg-config libssl-dev
+
+    - name: Install system dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        if [[ "${{ matrix.target }}" == "x86_64-apple-darwin" ]]; then
+          echo "⚙️ Installing x86 Homebrew (Rosetta) for Intel build..."
+          arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          arch -x86_64 /usr/local/bin/brew install openssl@3
+        else
+          echo "⚙️ Installing ARM Homebrew dependencies..."
+          brew list openssl@3 >/dev/null 2>&1 || brew install openssl@3
+        fi
+
+
+    - name: Install system dependencies (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        # Windows build uses native-tls which uses SChannel
+        echo "Using Windows native TLS (SChannel)"
+
+    - name: Build release binary
+      id: build
+      run: cargo build --release --package mpcli --target ${{ matrix.target }}
+
+
+    - name: Check build success
+      if: failure() && steps.build.outcome == 'failure'
+      run: |
+        echo "::error::Build failed for ${{ matrix.target }}"
+        echo "::notice::This platform will be skipped in the release"
+        exit 1
+
+    - name: Prepare binary (Unix)
+      if: matrix.os != 'windows-latest'
+      run: |
+        mkdir -p dist
+        cp target/${{ matrix.target }}/release/mp dist/
+        chmod +x dist/mp
+
+    - name: Prepare binary (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        mkdir dist
+        cp target/${{ matrix.target }}/release/mp.exe dist/
+
+    - name: Create archive (Unix)
+      if: matrix.os != 'windows-latest'
+      run: |
+        tar -czf ${{ matrix.name }}.tar.gz -C dist .
+
+    - name: Create archive (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        Compress-Archive -Path dist/* -DestinationPath ${{ matrix.name }}.zip
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.name }}
+        path: |
+          ${{ matrix.name }}.tar.gz
+          ${{ matrix.name }}.zip
+        if-no-files-found: ignore
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') && !cancelled()
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check build results
+      id: check-builds
+      run: |
+        echo "Checking which builds succeeded..."
+        # The workflow will continue even if some builds failed
+        # We'll upload whatever artifacts are available
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+      continue-on-error: true
+
+    - name: Prepare release assets
+      run: |
+        mkdir -p release-assets
+        if [ -d "artifacts" ]; then
+          find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) -exec cp {} release-assets/ \;
+          echo "Available release assets:"
+          ls -la release-assets/ || echo "No artifacts found"
+          
+          # Count successful builds
+          ASSET_COUNT=$(find release-assets -type f | wc -l)
+          echo "::notice::Found $ASSET_COUNT platform builds for release"
+          
+          if [ "$ASSET_COUNT" -eq 0 ]; then
+            echo "::error::No build artifacts found - all builds may have failed"
+            exit 1
+          fi
+        else
+          echo "::error::No artifacts directory found"
+          exit 1
+        fi
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: release-assets/*
+        draft: false
+        prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
