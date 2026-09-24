@@ -29,9 +29,9 @@ pub async fn run() {
 
     // Dispatch to the appropriate subcommand handler
     if let Some(post_matches) = matches.subcommand_matches("post") {
-        post_and_draft_subcommands::handle_post_or_draft_subcommand(post_matches).await;
+        post_and_draft_subcommands::handle_post_subcommand(post_matches).await;
     } else if let Some(draft_matches) = matches.subcommand_matches("draft") {
-        post_and_draft_subcommands::handle_post_or_draft_subcommand(draft_matches).await;
+        post_and_draft_subcommands::handle_draft_subcommand(draft_matches).await;
     } else if matches.subcommand_matches("configure").is_some() {
         configure_subcommand::handle_configure_subcommand();
     } else {

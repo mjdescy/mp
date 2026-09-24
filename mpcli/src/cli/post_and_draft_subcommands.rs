@@ -6,24 +6,22 @@ use std::{fs, io, io::Read};
 
 use crate::configuration::app_config::AppConfig;
 
-/// Handle the 'post' or 'draft' subcommand.
-pub async fn handle_post_or_draft_subcommand(matches: &ArgMatches) {
+/// Handle the 'post' subcommand.
+pub async fn handle_post_subcommand(matches: &ArgMatches) {
+    handle_post_or_draft_subcommand(matches, PostStatus::Published, "post").await;
+}
+
+/// Handle the 'draft' subcommand.
+pub async fn handle_draft_subcommand(matches: &ArgMatches) {
+    handle_post_or_draft_subcommand(matches, PostStatus::Draft, "draft").await;
+}
+
+async fn handle_post_or_draft_subcommand(matches: &ArgMatches, status: PostStatus, command: &str) {
     let app_config = AppConfig::load().unwrap_or_else(|e| {
         eprintln!("Error loading configuration:");
         eprintln!("{}", e);
         std::process::exit(1);
     });
-
-    let status = if matches.subcommand_name() == Some("draft") {
-        PostStatus::Draft
-    } else {
-        PostStatus::Published
-    };
-
-    let post_or_draft = match status {
-        PostStatus::Published => "post",
-        PostStatus::Draft => "draft",
-    };
 
     let extract_title =
         app_config.default_behavior.extract_title || matches.get_flag("extract-title");
@@ -31,7 +29,7 @@ pub async fn handle_post_or_draft_subcommand(matches: &ArgMatches) {
     let post = post_from_args(matches, status, extract_title).unwrap();
 
     if post.is_empty() {
-        eprintln!("Error: {} content cannot be empty", post_or_draft);
+        eprintln!("Error: {} content cannot be empty", command);
         std::process::exit(1);
     }
 
@@ -45,7 +43,7 @@ pub async fn handle_post_or_draft_subcommand(matches: &ArgMatches) {
             println!("{}", result.as_string());
         }
         Err(e) => {
-            eprintln!("Error publishing {}:", post_or_draft);
+            eprintln!("Error publishing {}:", command);
             eprintln!("{}", e);
             std::process::exit(1);
         }
