@@ -27,7 +27,7 @@ Add `mplib` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mplib = { version = "0.1.0" }  # Use appropriate version
+mplib = { version = "0.1.2" }  # Use appropriate version
 tokio = { version = "1.0", features = ["full"] }
 ```
 
