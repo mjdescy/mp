@@ -1,6 +1,6 @@
 [package]
 name = "mplib"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "mplib: Micropub Publisher Library | Publish text-only blog posts to Micropub endpoints."
 authors = ["Michael Descy <mike@mjdescy.me>"]
@@ -12,7 +12,7 @@ keywords = ["micropub", "blog", "microblog"]
 categories = ["web-programming"]
 
 [dependencies]
-reqwest = "0.12.24"
-serde = "1.0.228"
-serde_json = "1.0.145"
-thiserror = "2.0.17"
+reqwest = { version = "0.13.5", features = ["form"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+thiserror = "2.0.21"
