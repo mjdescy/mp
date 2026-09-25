@@ -1,6 +1,6 @@
 [package]
 name = "mpcli"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "mpcli: Micropub Publisher CLI | Publish text-only blog posts to Micropub endpoints via a command-line interface."
 authors = ["Michael Descy <mike@mjdescy.me>"]
