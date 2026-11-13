@@ -13,6 +13,40 @@ Both components support publishing posts and drafts with text-only content from 
 
 ## Crates
 
+### mptui | Micropub Publisher Teriminal User Interface
+
+#### Overview
+
+A simple app for microblogging in the terminal.
+
+#### Quick start
+
+`mptui` is a single binary. It will display a configuration wizard upon first launch or whenever the configuration file is not found.
+
+```bash
+mptui
+```
+
+#### Features
+
+- ✅ Publish posts and drafts to Micropub endpoints
+- ✅ Text editor with undo/redo and cut/copy/paste keyboad shortcuts
+- ✅ Keyboard-driven interface
+- ✅ Mouse support 
+- ✅ Handle Micropub service authentication with API tokens
+- ✅ Based on [mplib](https://github.com/mjdescy/mp/tree/main/mplib)
+- ✅ Built with Rust for performance and reliability
+
+#### Quick start
+
+`mptui` is a single binary. It will display a configuration wizard upon first launch or whenever the configuration file is not found.
+
+```bash
+mptui
+```
+
+For more information, see [mptui/README.md](mptui/README.md).
+
 ### mpcli | Micropub Publisher Command-Line Interface
 
 A simple, fast, and reliable command-line utility for publishing blog posts to any Micropub-compatible service.

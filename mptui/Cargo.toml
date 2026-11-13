@@ -1,0 +1,21 @@
+[package]
+name = "mptui"
+version = "0.1.0"
+edition = "2024"
+description = "mptui: Micropub Publisher Terminal User Interface | Publish text-only blog posts to Micropub endpoints."
+authors = ["Michael Descy <mike@mjdescy.me>"]
+license = "MIT"
+homepage = "https://github.com/mjdescy/mptui"
+repository = "https://github.com/mjdescy/mp"
+readme = "README.md"
+keywords = ["micropub", "blog", "microblog"]
+categories = ["web-programming"]
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+crossterm = "0.28.1"
+mplib = { path = "../mplib", version = "0.1.2" }
+ratatui = "0.30.0"
+tokio = { version = "1.54.1", features = ["rt"] }
+toml = "1.2.1"
+tui-textarea = { package = "tui-textarea-2", version = "0.13.2", default-features = false, features = ["crossterm_0_28"] }
