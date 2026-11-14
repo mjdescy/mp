@@ -1678,11 +1678,14 @@ mod tests {
     }
 
     #[test]
-    fn ctrl_s_opens_draft_confirmation_from_textbox() {
+    fn ctrl_alt_p_opens_draft_confirmation_from_textbox() {
         let mut app = App::default();
         app.textarea.insert_str("draft");
 
-        app.handle_key_event(KeyEvent::new(KeyCode::Char('s'), KeyModifiers::CONTROL));
+        app.handle_key_event(KeyEvent::new(
+            KeyCode::Char('p'),
+            KeyModifiers::CONTROL | KeyModifiers::ALT,
+        ));
 
         assert!(matches!(app.publish_dialog, Some(PublishTarget::Draft)));
     }
@@ -1698,11 +1701,14 @@ mod tests {
     }
 
     #[test]
-    fn ctrl_s_and_ctrl_p_ignore_whitespace_only_content() {
+    fn ctrl_alt_p_and_ctrl_p_ignore_whitespace_only_content() {
         let mut app = App::default();
         app.textarea.insert_str(" \n\t");
 
-        app.handle_key_event(KeyEvent::new(KeyCode::Char('s'), KeyModifiers::CONTROL));
+        app.handle_key_event(KeyEvent::new(
+            KeyCode::Char('p'),
+            KeyModifiers::CONTROL | KeyModifiers::ALT,
+        ));
         assert!(app.publish_dialog.is_none());
 
         app.handle_key_event(KeyEvent::new(KeyCode::Char('p'), KeyModifiers::CONTROL));
@@ -1717,13 +1723,13 @@ mod tests {
     }
 
     #[test]
-    fn shift_ctrl_enter_opens_draft_confirmation_from_textbox() {
+    fn ctrl_alt_enter_opens_draft_confirmation_from_textbox() {
         let mut app = App::default();
         app.textarea.insert_str("draft");
 
         app.handle_key_event(KeyEvent::new(
             KeyCode::Enter,
-            KeyModifiers::SHIFT | KeyModifiers::CONTROL,
+            KeyModifiers::CONTROL | KeyModifiers::ALT,
         ));
 
         assert!(matches!(app.publish_dialog, Some(PublishTarget::Draft)));
