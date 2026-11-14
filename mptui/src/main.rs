@@ -44,7 +44,7 @@ fn main() -> ExitCode {
     match result {
         Ok(()) => ExitCode::SUCCESS,
         Err(e) => {
-            eprintln!("mptui-ui: {e}");
+            eprintln!("mptui: {e}");
             ExitCode::FAILURE
         }
     }
@@ -74,7 +74,7 @@ mod tests {
     use super::*;
 
     fn parse(args: &[&str]) -> Result<Option<PathBuf>, clap::Error> {
-        Cli::try_parse_from(std::iter::once("mptui-ui").chain(args.iter().copied()))
+        Cli::try_parse_from(std::iter::once("mptui").chain(args.iter().copied()))
             .map(|cli| cli.config)
     }
 

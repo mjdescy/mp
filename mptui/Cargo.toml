@@ -1,6 +1,6 @@
 [package]
 name = "mptui"
-version = "0.1.0"
+version = "0.1.3-rc.1"
 edition = "2024"
 description = "mptui: Micropub Publisher Terminal User Interface | Publish text-only blog posts to Micropub endpoints."
 authors = ["Michael Descy <mike@mjdescy.me>"]
@@ -14,7 +14,7 @@ categories = ["web-programming"]
 [dependencies]
 clap = { version = "4.6.7", features = ["derive"] }
 crossterm = "0.28.1"
-mplib = { path = "../mplib", version = "0.1.2" }
+mplib = { path = "../mplib", version = "=0.1.3-rc.1" }
 ratatui = "0.30.0"
 tokio = { version = "1.54.1", features = ["rt"] }
 toml = "1.2.1"
