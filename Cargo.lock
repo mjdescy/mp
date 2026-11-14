@@ -1358,7 +1358,7 @@ dependencies = [
 
 [[package]]
 name = "mpcli"
-version = "0.1.3-rc.1"
+version = "0.1.3"
 dependencies = [
  "clap",
  "directories",
@@ -1372,7 +1372,7 @@ dependencies = [
 
 [[package]]
 name = "mplib"
-version = "0.1.3-rc.1"
+version = "0.1.3"
 dependencies = [
  "reqwest",
  "serde",
@@ -1382,7 +1382,7 @@ dependencies = [
 
 [[package]]
 name = "mptui"
-version = "0.1.3-rc.1"
+version = "0.1.3"
 dependencies = [
  "clap",
  "crossterm 0.28.1",

@@ -1,6 +1,6 @@
 [package]
 name = "mplib"
-version = "0.1.3-rc.1"
+version = "0.1.3"
 edition = "2024"
 description = "mplib: Micropub Publisher Library | Publish text-only blog posts to Micropub endpoints."
 authors = ["Michael Descy <mike@mjdescy.me>"]
